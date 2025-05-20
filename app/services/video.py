@@ -48,7 +48,7 @@ class SubClippedVideoClip:
 
 
 audio_codec = "aac"
-video_codec = "libx264"
+video_codec = "h264_nvenc"
 fps = 30
 
 def close_clip(clip):
@@ -281,6 +281,7 @@ def combine_videos(
                 logger=None,
                 temp_audiofile_path=output_dir,
                 audio_codec=audio_codec,
+                codec=video_codec,
                 fps=fps,
             )
             close_clip(base_clip)
@@ -475,6 +476,7 @@ def generate_video(
     video_clip.write_videofile(
         output_file,
         audio_codec=audio_codec,
+        codec=video_codec,
         temp_audiofile_path=output_dir,
         threads=params.n_threads or 2,
         logger=None,
@@ -524,7 +526,7 @@ def preprocess_video(materials: List[MaterialInfo], clip_duration=4):
 
             # Output the video to a file.
             video_file = f"{material.url}.mp4"
-            final_clip.write_videofile(video_file, fps=30, logger=None)
+            final_clip.write_videofile(video_file, fps=30, codec=video_codec, logger=None)
             close_clip(clip)
             material.url = video_file
             logger.success(f"image processed: {video_file}")
